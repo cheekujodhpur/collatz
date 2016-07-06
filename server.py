@@ -6,13 +6,15 @@ import socket
 
 HOST = ''   #all interfaces
 PORT = 7991
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind((HOST, PORT))
-s.listen(1)
-conn, addr = s.accept()
-print 'Connected by', addr
+
+count = 0
 while True:
-    data = conn.recv(1024)
+    data, addr = s.recvfrom(1024)
     if not data: break
-    conn.send(data)
-conn.close()
+    if data == 'EOF':
+        break
+    else:
+        count = count+1
+print "Received", count
