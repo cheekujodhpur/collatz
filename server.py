@@ -3,7 +3,7 @@
 # Server program
 
 import socket
-import struct
+import json
 
 HOST = ''   #all interfaces
 PORT = 7991
@@ -11,15 +11,39 @@ ADDR = (HOST, PORT)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind(ADDR)
 
-count = 0
-while True:
-    # read the header, size of incoming number
-    try:
-        num_len = struct.unpack('<L', s.recvfrom(struct.calcsize('<L'))[0])[0]
-    except ValueError:
-        print "Corrupt header"
+# Initialize the number
+number = 0
+with open("limit") as f:
+    number = int(f.read())
 
-    data, remote_addr = s.recvfrom(num_len)
-    print data
-    if data.isdigit(): count = count + 1
-print "Received", count
+def request_handler(request):
+    global number
+
+    if request["type"] == "CONTROL":
+        if request["value"] == "GET":
+            # make packet
+            packet = {}
+            packet["type"] = "DATA"
+            packet["value"] = number
+
+            # update current number
+            number = number+1
+
+            s.sendto(json.dumps(packet), remote_addr)
+
+        elif request["value"] == "SAVE":
+            with open("limit", "w") as f:
+                f.write(number)
+                f.write("\n")
+
+        elif request["value"] == "INTERRUPT":
+            with open("doom", "w") as f:
+                f.write(int(request["number"]))
+                f.write("\n")
+
+while True:
+    # read 1KB of data
+    data, remote_addr = s.recvfrom(1024)
+    request = json.loads(data)
+    
+    request_handler(request)
