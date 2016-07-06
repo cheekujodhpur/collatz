@@ -12,15 +12,20 @@ ADDR = (HOST, PORT)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 def is_collatz(num):
+    numo = num
     tmp = []
     while num != 1:
         tmp.append(num)
         if num%2 == 0:
-            return True
+            num = num/2
         else:
             num = num*3 + 1
         if num in tmp:
             return False
+
+        # assume all smaller numbers are checked
+        if num < numo:
+            return True
     return True
 
 def get_number():
