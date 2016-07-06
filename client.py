@@ -4,8 +4,9 @@
 
 import socket
 import json
+import sys
 
-HOST = '127.0.0.1'   # The remote host
+HOST = sys.argv[1]   # The remote host
 PORT = 7991          # The same port as server
 ADDR = (HOST, PORT)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
