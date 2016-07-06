@@ -16,7 +16,7 @@ def is_collatz(num):
     while num != 1:
         tmp.append(num)
         if num%2 == 0:
-            num /= 2
+            return True
         else:
             num = num*3 + 1
         if num in tmp:
