@@ -50,5 +50,4 @@ def send_interrupt(number):
     s.sendto(json.dumps(packet), ADDR)
 
 while True:
-    x = get_number()
-    print x
+    get_number()

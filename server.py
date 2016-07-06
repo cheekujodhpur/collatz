@@ -4,9 +4,10 @@
 
 import socket
 import json
+import sys
 
 HOST = ''   #all interfaces
-PORT = 7991
+PORT =  7991
 ADDR = (HOST, PORT)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind(ADDR)
@@ -33,13 +34,16 @@ def request_handler(request):
 
         elif request["value"] == "SAVE":
             with open("limit", "w") as f:
-                f.write(number)
+                f.write(str(number))
                 f.write("\n")
+            print "Saved at", number
 
         elif request["value"] == "INTERRUPT":
             with open("doom", "w") as f:
-                f.write(int(request["number"]))
+                f.write(str(request["num"]))
                 f.write("\n")
+            print "Interrupted at", number
+            sys.exit(1)
 
 while True:
     # read 1KB of data
