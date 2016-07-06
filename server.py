@@ -3,6 +3,7 @@
 # Server program
 
 import socket
+import struct
 
 HOST = ''   #all interfaces
 PORT = 7991
@@ -11,10 +12,8 @@ s.bind((HOST, PORT))
 
 count = 0
 while True:
-    data, addr = s.recvfrom(1024)
-    if not data: break
-    if data == 'EOF':
-        break
-    else:
-        count = count+1
+    num_len = struct.unpack('<L', s.recvfrom(struct.calcsize('<L'))[0])[0]
+    if num_len == 0: break
+    data, addr = s.recvfrom(num_len)
+    if data.isdigit(): count = count + 1
 print "Received", count
