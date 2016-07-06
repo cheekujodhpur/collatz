@@ -6,7 +6,7 @@ import socket
 
 HOST = ''   #all interfaces
 PORT = 7991
-s = socket.socket(socket.AF_INET, socket.sock_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(1)
 conn, addr = s.accept()
