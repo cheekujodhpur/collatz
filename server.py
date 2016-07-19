@@ -12,6 +12,9 @@ ADDR = (HOST, PORT)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind(ADDR)
 
+# Size of the range, this can be caluclated later
+RANGE = 1000
+
 # Initialize the number
 number = 0
 with open("limit") as f:
@@ -25,10 +28,11 @@ def request_handler(request):
             # make packet
             packet = {}
             packet["type"] = "DATA"
-            packet["value"] = number
+            packet["left"] = number
+            packet["right"] = number + 1000
 
             # update current number
-            number = number+1
+            number = number+1001
 
             s.sendto(json.dumps(packet), remote_addr)
 

@@ -41,11 +41,12 @@ def get_number():
     response = json.loads(reply)
 
     if response["type"] == "DATA":
-        number = int(response["value"])
-        if not is_collatz(number):
-           send_interrupt(number) 
+        left,right = int(response["left"]), int(response["right"])
+        for number in range(left, right+1):
+            if not is_collatz(number):
+               send_interrupt(number) 
 
-    return number
+    return
 
 def send_interrupt(number):
     # generate packet
